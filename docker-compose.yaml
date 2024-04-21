@@ -1,0 +1,31 @@
+services:
+
+  lutris:
+    build: .
+    image: lutris:amd
+    container_name: lutris-amd
+    shm_size: '128M'
+    ipc: host
+    networks:
+      - games_net
+    volumes:
+      - /tmp/.X11-unix/X1:/tmp/.X11-unix/X1:ro
+      - /tmp/pulseaudio_lutris.socket:/tmp/pulseaudio.socket:ro
+      - home:/home/nocks
+    environment:
+      - DISPLAY=$DISPLAY
+    devices:
+      - /dev/snd:/dev/snd
+      - /dev/dri:/dev/dri
+
+volumes:
+  home:
+
+networks:
+
+  games_net:
+    name: games_net
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.25.0.36/30"
